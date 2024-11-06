@@ -1,0 +1,696 @@
+/*************************************************************************************
+* Getting Started with Multi2Sim Simulator @ LaCASA Laboratory (lacasa.uah.edu)
+* This tutorial should help you get started with Multi2Sim on computers in LaCASA lab.
+* It is tested on eb136i-nsf02 machine that runs 64-bit Fedora OS.
+* Authors: Aleksandar Milenkovic, Amrish K. Tewar
+*
+* Email: milenkovic@computer.org; akt0001@uah.edu
+*
+* Date: September 2014
+*************************************************************************************/
+
+
+
+Multi2Sim is a simulation framework for CPU-GPU heterogeneous computing platforms.
+Multi2Sim includes models for superscalar, multithreaded, and multicore processors, 
+as well as GPU architectures. 
+It supports the following ISAs: X86, ARM, MIPS, NVIDIA Fermi, AMD Southern Islands.
+Multi2Sim is developed at Northeastern University, Boston, MA. 
+The ultimate source of information (manuals, downloads, benchmarks) is the 
+Multi2Sim web site at https://www.multi2sim.org/.
+
+
+1. Location
+***********
+
+On the nsf02 machine the multi2sim and corresponding benchmarks 
+are  available in the /opt/m2s directory (see below).
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 m2s]$ pwd
+/opt/m2s
+[milenka@eb136i-nsf02 m2s]$ ls 
+m2s-benchmarks-parsec-2.1  m2s-bench-spec2006  m2s-bench-splash2  mediabench-1  multi2sim-4.2
+[milenka@eb136i-nsf02 m2s]$ cd multi2sim-4.2/
+[milenka@eb136i-nsf02 multi2sim-4.2]$ ls
+aclocal.m4  ChangeLog     config.status  configure.ac  images      lib        m2c          Makefile.in  README   src
+AUTHORS     config.guess  config.sub     COPYING       INSTALL     libtool    Makefile     missing      runtime  TODO
+bin         config.log    configure      depcomp       install-sh  ltmain.sh  Makefile.am  NEWS         samples  ylwrap
+[milenka@eb136i-nsf02 multi2sim-4.2]$ 
+[milenka@eb136i-nsf02 bin]$ pwd
+/opt/m2s/multi2sim-4.2/bin
+[milenka@eb136i-nsf02 bin]$ ls
+m2c  m2s
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Make sure the directory /opt/m2s/multi2sim-4.2/bin is in your path.
+
+
+2. Explore Multi2Sim options
+*****************************
+
+Explore m2s options by typing m2s --help.
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 bin]$ m2s --help
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: EC60y
+
+Syntax:
+
+        m2s [<options>] [<x86_binary> [<arg_list>]]
+
+The user command-line supports a sequence of command-line options, and can
+include an x86 ELF binary (executable x86 program) followed by its arguments.
+The execution of this program will be simulated by Multi2Sim, together with the
+rest of the x86 programs specified in the context configuration file (option
+'--ctx-config <file>'). The rest of the possible command-line options are
+classified in categories and listed next:
+
+
+================================================================================
+General Options
+================================================================================
+
+  --ctx-config <file>
+      Use <file> as the context configuration file. This file describes the
+      initial set of running applications, their arguments, and environment
+      variables. Type 'm2s --ctx-config-help' for a description of the file
+      format.
+
+  --ctx-config-help
+      Show a help message describing the format of the context configuration
+      file, passed to the simulator through option '--ctx-config <file>'.
+
+  --elf-debug <file>
+      Dump debug information related with the analysis of ELF files. Every time
+      an executable file is open (CPU program of GPU kernel binary), detailed
+      information about its symbols, sections, strings, etc. is dumped here.
+
+  --max-time <time>
+      Maximum simulation time in seconds. The simulator will stop once this time
+      is exceeded. A value of 0 (default) means no time limit.
+
+  --trace <file>.gz
+      Generate a trace file with debug information on the configuration of the
+      modeled CPUs, GPUs, and memory system, as well as their dynamic
+      simulation. The trace is a compressed plain-text file in format. The user
+      should watch the size of the generated trace as simulation runs, since
+      the trace file can quickly become extremely large.
+
+  --visual <file>.gz
+      Run the Multi2Sim Visualization Tool. This option consumes a file
+      generated with the '--trace' option in a previous simulation. This option
+      is only available on systems with support for GTK 3.0 or higher.
+
+
+================================================================================
+x86 CPU Options
+================================================================================
+
+  --x86-config <file>
+      Configuration file for the x86 CPU timing model, including parameters
+      describing stage bandwidth, structures size, and other parameters of
+      processor cores and threads. Type 'm2s --x86-help' for details on the file
+      format.
+
+  --x86-debug-call <file>
+      Dump debug information about function calls and returns. The control flow
+      of an x86 program can be observed leveraging ELF symbols present in the
+      program binary.
+
+  --x86-debug-clrt <file>
+      Debug information for the newer implementation of the OpenCL runtime
+      library (not available yet).
+
+  --x86-debug-ctx <file>
+      Dump debug information related with context creation, destruction,
+      allocation, or state change.
+
+  --x86-debug-glut <file>
+      Debug information for GLUT runtime calls performed by an OpenGL program
+      based on the GLUT library.
+
+  --x86-debug-loader <file>
+      Dump debug information extending the analysis of the ELF program binary.
+      This information shows which ELF sections and symbols are loaded to the
+      initial program memory image.
+
+  --x86-debug-isa
+      Debug information for dynamic execution of x86 instructions. Updates on
+      the processor state can be analyzed using this information.
+
+  --x86-debug-opengl <file>
+      Debug information for OpenGL runtime calls.
+
+  --x86-debug-syscall
+      Debug information for system calls performed by an x86 program, including
+      system call code, arguments, and return value.
+
+  --x86-debug-trace-cache
+      Debug information for trace cache.
+
+  --x86-disasm <file>
+      Disassemble the x86 ELF file provided in <file>, using the internal x86
+      disassembler. This option is incompatible with any other option.
+
+  --x86-help
+      Display a help message describing the format of the x86 CPU context
+      configuration file.
+
+  --x86-last-inst <bytes>
+      Stop simulation when the specified instruction is fetched. Can be used to
+      trigger a checkpoint with option '--x86-save-checkpoint'. The instruction
+      must be given as a sequence of hexadecimal digits, including trailing
+      zeros if needed.
+
+  --x86-load-checkpoint <file>
+      Load a checkpoint of the x86 architectural state, created in a previous
+      execution of the simulator with option '--x86-save-checkpoint'.
+
+  --x86-max-cycles <cycles>
+      Maximum number of cycles for x86 timing simulation. Use 0 (default) for no
+      limit. This option is only valid for detailed x86 simulation (option
+      '--x86-sim detailed').
+
+  --x86-max-inst <inst>
+      Maximum number of x86 instructions. On x86 functional simulation, this
+      limit is given in number of emulated instructions. On x86 detailed
+      simulation, it is given as the number of committed (non-speculative)
+      instructions. Use 0 (default) for unlimited.
+
+  --x86-report <file>
+      File to dump a report of the x86 CPU pipeline, including statistics such
+      as the number of instructions handled in every pipeline stage, read/write
+      accesses performed on pipeline queues, etc. This option is only valid for
+      detailed x86 simulation (option '--x86-sim detailed').
+
+  --x86-save-checkpoint <file>
+      Save a checkpoint of x86 architectural state at the end of simulation.
+      Useful options to use together with this are '--x86-max-inst' and
+      '--x86-last-inst' to force the simulation to stop and create a checkpoint.
+
+  --x86-sim {functional|detailed}
+      Choose a functional simulation (emulation) of an x86 program, versus
+      a detailed (architectural) simulation. Simulation is functional by
+      default.
+
+
+	. . . 
+	. . . 
+	/* AMD Evergreen GPU, AMD Southern Islands, ARM, MIPS, NVIDIA options removed */  
+
+
+================================================================================
+Memory System Options
+================================================================================
+
+  --mem-config <file>
+      Configuration file for memory hierarchy. Run 'm2s --mem-help' for a
+      description of the file format.
+
+  --mem-debug <file>
+      Dump debug information about memory accesses, cache memories, main memory,
+      and directories.
+
+  --mem-help
+      Print help message describing the format of the memory configuration file,
+      passed to the simulator with option '--mem-config <file>'.
+
+  --mem-report
+      File for a report on the memory hierarchy, including cache hits, misses,
+      evictions, etc. This option must be used together with detailed simulation
+      of any CPU/GPU architecture.
+
+
+================================================================================
+Network Options
+================================================================================
+
+  --net-config <file>
+      Network configuration file. Networks in the memory hierarchy can be
+      defined here and referenced in other configuration files. For a
+      description of the format, use option '--net-help'.
+
+  --net-debug
+      Debug information related with interconnection networks, including packet
+      transfers, link usage, etc.
+
+  --net-help
+      Print help message describing the network configuration file, passed to
+      the simulator with option '--net-config <file>'.
+
+  --net-injection-rate <rate>
+      For network simulation, packet injection rate for nodes (e.g. 0.01 means
+      one packet every 100 cycles on average. Nodes will inject packets into
+      the network using random delays with exponential distribution with lambda
+      = <rate>. This option must be used together with '--net-sim'.
+
+  --net-max-cycles <cycles>
+      Maximum number of cycles for network simulation. This option must be used
+      together with option '--net-sim'.
+
+  --net-msg-size <size>
+      For network simulation, packet size in bytes. An entire packet is assumed
+      to fit in a node's buffer, but its transfer latency through a link will
+      depend on the message size and the link bandwidth. This option must be
+      used together with '--net-sim'.
+
+  --net-report <file>
+      File to dump detailed statistics for each network defined in the network
+      configuration file (option '--net-config'). The report includes statistics
+      on bandwidth utilization, network traffic, etc.
+
+  --net-visual <file>
+      File for graphically representing the interconnection network. This file 
+      is an input for a supplementary tool called 'graphplot' which is located 
+      in samples/network folder in multi2sim trunk.
+
+  --net-sim <network>
+      Runs a network simulation using synthetic traffic, where <network> is the
+      name of a network specified in the network configuration file (option
+      '--net-config').
+
+[milenka@eb136i-nsf02 bin]$ 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+3. Running a test program
+**************************
+
+Run test-args mini benchmark as shown below (first run natively and then on m2s).
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 bin]$ /opt/m2s/multi2sim-4.2/samples/x86/test-args how are you
+number of arguments: 4
+        argv[0] = /opt/m2s/multi2sim-4.2/samples/x86/test-args
+        argv[1] = how
+        argv[2] = are
+        argv[3] = you
+
+[milenka@eb136i-nsf02 bin]$ m2s /opt/m2s/multi2sim-4.2/samples/x86/test-args how are you
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: lW4fJ
+
+number of arguments: 4
+        argv[0] = /opt/m2s/multi2sim-4.2/samples/x86/test-args
+        argv[1] = how
+        argv[2] = are
+        argv[3] = you
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 0.01 [s]
+SimEnd = ContextsFinished
+
+[ x86 ]
+RealTime = 0.01 [s]
+Instructions = 29642
+InstructionsPerSecond = 4215901
+Contexts = 1
+Memory = 9035776
+
+[milenka@eb136i-nsf02 bin]$ 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The output of the m2s run is split into the output coming from the simulator, 
+provided in the standard error output stderr. There is also the output 
+coming from the guest application, provided in the standard output stdout. 
+Even if the guest program tries to write into stderr, 
+Multi2Sim redirects the output text into the host standard output stdout. 
+In Unix, standard and standard error outputs can be dumped into real or virtual files 
+using the redirection syntax (e.g., “> my-file” or “2> /dev/null”).
+A format used throughout Multi2Sim’s modules, both for input configuration files 
+and output configuration reports, is the INI file format. 
+An INI file is a piece of plain-text composed of section
+headers, variable-value pairs, and comments. 
+A section header is a string surrounded with square brackets (e.g., “[My-section]”). 
+A variable-value pair is formed of two strings separated with an equal
+sign, always appearing after a section header (e.g., “Var-name = 123”). 
+And a comment is a line starting with a semicolon (“;”).
+Multi2Sim’s standard error output stderr follows the INI file format. 
+It is used to output a summarized report of the simulation execution. 
+The report contains a welcome string, dumped before simulation
+starts, and a set of statistics classified in sections, shown at the tend of the simulation. 
+There is one section named [General] presenting global simulation statistics, and 
+one individual section for each activated processor model — in this case only [x86].
+
+Section [General] of the statistics summary, presented in the standard error output 
+at the end of a simulation, contains the following variables:
+
+* RealTime. Total real time of the simulation. 
+This value is purely a simulator performance metric,
+and should not be used for guest program performance evaluation purposes.
+
+* SimEnd. Reason why the simulation finished, taking one of the following values:
+	– ContextsFinished. All guest programs and their spawned threads finished execution.
+	– MaxTime. The maximum simulation time specified with command-line option ––max-time
+		<time> has been reached.
+	– Signal. Multi2Sim received a signal to stop simulation (the user pressed Ctrl+C).
+	– Stall. Detailed simulation has stalled. Most architectures include sanity checks asserting
+		that some constant progress must be made in the simulated pipelines. If no instruction is
+		emulate during a large number of cycles, a stall is assumed and simulation automatically
+		stops.
+	Additional, ISA specific, reasons can be found in the user manual.
+
+When running detailed models, other variables are common:
+* SimTime. Total simulated time in nanoseconds. This time can be used as a performance metric
+for the guest application running on Multi2Sim and the modeled architectures. It is obtained
+based on the pipeline models, frequency domains, guest instructions executed, etc. 
+
+* Frequency. Fastest frequency domain specified in configuration files, considering memory
+hierarchy, networks, and CPU/GPU architectures. 
+
+* Cycles. Total number of simulation cycles with an active detailed simulation in any of the
+frequency domains. This variable is calculated as the product SimTime×Frequency.
+
+The statistics summary includes one additional section for each microprocessor architecture.
+See the user manual for details.
+
+
+4. Compiling programs for x86
+******************************
+
+To compile your own programs to run on m2s the following commands should be used:
+
+* To compile C/C++ program (32-bit and static switches must be set)
+  gcc –filename.c –m32 –static
+
+* To compile a pthread program include the –lpthread flag
+  gcc –filename.c –m32 –static –lpthread
+
+* To compile an OpenMP program
+  gcc omp_filename.c –fopenmp
+  export OMP_NUM_THREADS=2
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# create your local working directory, e.g., m2s, and move there
+[milenka@eb136i-nsf02 m2s]$ pwd
+/home/milenka/m2s
+
+# copy the files Hello.cpp, Hello_pthread.cpp and x86_config from /opt/arch.tut/m2s/* .
+[milenka@eb136i-nsf02 m2s]$ cp /opt/arch.tut/m2s/* .
+
+# inspect Hello.cpp
+[milenka@eb136i-nsf02 m2s]$ cat Hello.cpp
+/*
+Hello world demo code.
+To compile for m2s: g++ -static -m32 Hello.cpp -o Hello
+*/
+#include <iostream>
+
+int main (){
+  std::cout << "Hello" << std::endl;
+  return 0;
+}
+[milenka@eb136i-nsf02 m2s]$ g++ -static -m32 Hello.cpp -o Hello
+[milenka@eb136i-nsf02 m2s]$ 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  
+
+5. Running simulations
+**********************
+
+There are two type of simulation functional and detailed.
+
+Functional Simulator: The purpose of this simulator is to 
+reproduce the original behaviour of a guest program, it behaves like emulator. 
+E.g., we can use the ARM binary and run with the ARM multi2sim emulator on x86 machine. 
+Detailed Simulator: The purpose of this simulator is to give 
+timed and exact simulation behaviour as a program is running on the hardware.
+
+(i) Functional Simulator: Hello 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 m2s]$ m2s Hello
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: STMpU
+
+Hello
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 0.02 [s]
+SimEnd = ContextsFinished
+
+[ x86 ]
+RealTime = 0.02 [s]
+Instructions = 51644
+InstructionsPerSecond = 3288170
+Contexts = 1
+Memory = 9633792
+
+[milenka@eb136i-nsf02 m2s]$ 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+(ii) Detailed Simulator: Hello 
+We need to specify --x86-sim and --x86-config switches. 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 m2s]$ m2s --x86-sim detailed --x86-config x86_config ./Hello
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: 5QxWA
+
+Hello
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 0.45 [s]
+SimEnd = ContextsFinished
+SimTime = 377550.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 377551
+
+[ x86 ]
+RealTime = 0.44 [s]
+Instructions = 112808
+InstructionsPerSecond = 255187
+Contexts = 1
+Memory = 9633792
+FastForwardInstructions = 0
+CommittedInstructions = 51650
+CommittedInstructionsPerCycle = 0.1369
+CommittedMicroInstructions = 91738
+CommittedMicroInstructionsPerCycle = 0.2431
+BranchPredictionAccuracy = 0.8738
+SimTime = 377297.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 377297
+CyclesPerSecond = 853495
+
+[milenka@eb136i-nsf02 m2s]$ 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+(iii) Functional Simulation: Hello_pthread
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# list the source code
+[milenka@eb136i-nsf02 m2s]$ cat Hello_pthread.cpp
+/**********************************************************************************
+Hello world demo parallel implementation
+To run on m2s compile as follows: g++ -static -m32 Hello_pthread.cpp -o Hello_pthread -lpthread
+************************************************************************************/
+
+
+#include <iostream>
+#include <pthread.h>
+#define Max_thrd 2
+pthread_mutex_t MUTEX;
+
+void *Thread_Hello(void *arg){
+     pthread_mutex_lock(&MUTEX);
+     std::cout << "Hello from Thread" << (int)arg << std::endl;
+     pthread_mutex_unlock(&MUTEX);
+}
+
+int main(){
+  int i;
+  pthread_t Threads[Max_thrd];
+  pthread_mutex_init(&MUTEX, NULL);
+  /*Create threads*/
+  for (i = 1; i< Max_thrd; i++)
+    pthread_create(&Threads[i], NULL, Thread_Hello, (int *) i);
+  /*Thread 0 calls function*/  
+  Thread_Hello((int *) 0);
+  /*Join threads*/
+  for (i = 1; i< Max_thrd; i++)
+    pthread_join(Threads[i], NULL);
+    
+  return 0;  
+}
+
+# compilation
+[milenka@eb136i-nsf02 m2s]$ g++ -static -m32 Hello_pthread.cpp -o Hello_pthread -lpthread
+/usr/lib64/../lib/libpthread.a(libpthread.o): In function `sem_open':
+(.text+0x7157): warning: the use of `mktemp' is dangerous, better use `mkstemp'
+[milenka@eb136i-nsf02 m2s]$ 
+
+# native run
+[milenka@eb136i-nsf02 m2s]$ ./Hello_pthread
+Hello from Thread0
+Hello from Thread1
+
+# functional run on m2s
+[milenka@eb136i-nsf02 m2s]$ m2s ./Hello_pthread
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: SjntI
+
+Hello from Thread0
+Hello from Thread1
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 0.02 [s]
+SimEnd = ContextsFinished
+
+[ x86 ]
+RealTime = 0.01 [s]
+Instructions = 56533
+InstructionsPerSecond = 3854435
+Contexts = 2
+Memory = 18120704
+
+[milenka@eb136i-nsf02 m2s]$ 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(iv) Detailed Simulation: Hello_pthread
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 m2s]$ m2s --x86-sim detailed --x86-config x86_config ./Hello_pthread
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: vAE6N
+
+Hello from Thread0
+Hello from Thread1
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 0.51 [s]
+SimEnd = ContextsFinished
+SimTime = 453869.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 453870
+
+[ x86 ]
+RealTime = 0.50 [s]
+Instructions = 133690
+InstructionsPerSecond = 265728
+Contexts = 2
+Memory = 18120704
+FastForwardInstructions = 0
+CommittedInstructions = 56532
+CommittedInstructionsPerCycle = 0.1246
+CommittedMicroInstructions = 101330
+CommittedMicroInstructionsPerCycle = 0.2234
+BranchPredictionAccuracy = 0.8525
+SimTime = 453612.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 453612
+CyclesPerSecond = 901618
+
+[milenka@eb136i-nsf02 m2s]$ 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+6. Tracing
+*************
+To record a detailed trace of execution use --trace flag. 
+Tracing implemented in the Multi2sim shows output of each instruction for each stage.
+Please be careful as traces tend to eat a lot of disk space!!!
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 m2s]$ m2s --x86-sim detailed --x86-config x86_config --trace Hello_pthread_trace.gz ./Hello_pthread
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: yb4zR
+
+Hello from Thread0
+Hello from Thread1
+
+. . .
+
+[milenka@eb136i-nsf02 m2s]$ ls -alt Hello_pthread_trace*
+-rw-r--r-- 1 milenka milenka    9483905 Oct  1 21:26 Hello_pthread_trace.gz
+
+[milenka@eb136i-nsf02 m2s]$ gunzip Hello_pthread_trace.gz 
+[milenka@eb136i-nsf02 m2s]$ head Hello_pthread_trace 
+x86.init version="1.671" num_cores=2 num_threads=1
+mem.init version="1.678"
+mem.new_net name="x86-net-l1-l2" num_nodes=4
+mem.new_net name="x86-net-l2-mm" num_nodes=3
+mem.new_mod name="x86-l1-0" num_sets=16 assoc=2 block_size=64 sub_block_size=64 num_sharers=1 level=1 high_net="" high_net_node=0 low_net="x86-net-l1-l2" low_net_node=0
+mem.new_mod name="x86-l1-1" num_sets=16 assoc=2 block_size=64 sub_block_size=64 num_sharers=1 level=1 high_net="" high_net_node=0 low_net="x86-net-l1-l2" low_net_node=1
+mem.new_mod name="x86-l2" num_sets=64 assoc=4 block_size=64 sub_block_size=64 num_sharers=4 level=2 high_net="x86-net-l1-l2" high_net_node=2 low_net="x86-net-l2-mm" low_net_node=0
+mem.new_mod name="x86-mm" num_sets=128 assoc=8 block_size=64 sub_block_size=64 num_sharers=3 level=3 high_net="x86-net-l2-mm" high_net_node=1 low_net="" low_net_node=0
+c clk=1
+x86.map_ctx ctx=100 core=0 thread=0 ppid=0
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+7. Disassembly
+*************
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 m2s]$  m2s --x86-disasm ./Hello | more
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: 77S6W
+
+Disassembly of section .init:
+
+08048140 <__rel_iplt_end>:
+ 8048140:       55                      push   ebp
+ 8048141:       89 e5                   mov    ebp,esp
+ 8048143:       53                      push   ebx
+ 8048144:       83 ec 04                sub    esp,0x4
+ 8048147:       e8 00 00 00 00          call   804814c
+ 804814c:       5b                      pop    ebx
+ 804814d:       81 c3 90 43 10 00       add    ebx,0x104390
+ 8048153:       8b 93 88 ff ff ff       mov    edx,DWORD PTR [ebx-0x78]
+ 8048159:       85 d2                   test   edx,edx
+ 804815b:       74 05                   je     8048162
+ 804815d:       e8 9e 7e fb f7          call   0
+ 8048162:       e8 f9 00 00 00          call   8048260
+ 8048167:       e8 a4 2a 0c 00          call   810ac10
+ 804816c:       58                      pop    eax
+ 804816d:       5b                      pop    ebx
+ 804816e:       c9                      leave
+ 804816f:       c3                      ret
+
+Disassembly of section .plt:
+ 8048170:       ff 25 e8 c4 14 08       jmp    DWORD PTR ds:0x814c4e8
+ 8048176:       68 00 00 00 00          push   0x0
+--More--
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+END_OF_FILE

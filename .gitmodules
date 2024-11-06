@@ -1,0 +1,9 @@
+[submodule "m2s-bench-parsec-3.0"]
+	path = m2s-bench-parsec-3.0
+	url = git@github.com:Multi2Sim/m2s-bench-parsec-3.0.git
+[submodule "m2s-bench-splash2"]
+	path = m2s-bench-splash2
+	url = git@github.com:Multi2Sim/m2s-bench-splash2.git
+[submodule "multi2sim"]
+	path = multi2sim
+	url = git@github.com:Multi2Sim/multi2sim.git

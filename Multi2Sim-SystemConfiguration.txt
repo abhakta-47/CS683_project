@@ -1,0 +1,400 @@
+/*************************************************************************************
+* Multi2Sim Simulator @ LaCASA Laboratory (lacasa.uah.edu)
+* This file illustrates how to configure a computer system for 
+* the detailed simulation in Multi2Sim.  
+*
+* Authors: Amrish K. Tewar, Aleksandar Milenkovic 
+*
+* Email: akt0001@uah.edu; milenkovic@computer.org 
+*
+* Date: October 2014
+*************************************************************************************/
+
+In this tutorial we are going to simulate a single-threaded matrix multiplication
+benchmarks on a computer system with specified system parameters.
+
+1. Copy benchmark files to your working directory
+=================================================
+Follow the steps below. You should have mm_mult_serial.cpp as well
+as configuration files x86_config, ctx_config, and mem_config in your directory.
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 m2s]$ mkdir Serial_MM
+[milenka@eb136i-nsf02 m2s]$ cd Serial_MM/
+[milenka@eb136i-nsf02 mmtest]$ pwd
+/home/milenka/m2s/Serial_MM
+[milenka@eb136i-nsf02 mmtest]$ cp /opt/arch.tut/m2s/Serial_MM/* .
+
+[milenka@eb136i-nsf02 m2s]$ cd Serial_MM/
+[milenka@eb136i-nsf02 Serial_MM]$ cp /opt/arch.tut/m2s/Serial_MM/* .
+[milenka@eb136i-nsf02 Serial_MM]$ ls -lat
+total 28
+drwxr-xr-x 2 milenka milenka 4096 Oct  3 17:08 .
+-rw-r--r-- 1 milenka milenka  179 Oct  3 17:08 ctx_config
+-rw-r--r-- 1 milenka milenka  836 Oct  3 17:08 mem_config
+-rw-r--r-- 1 milenka milenka 5696 Oct  3 17:08 mm_mult_serial.cpp
+-rw-r--r-- 1 milenka milenka   91 Oct  3 17:08 x86_config
+drwxr-xr-x 4 milenka milenka 4096 Oct  3 17:03 ..
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+2. Compile and run the program mm_mult_serial.cpp
+=================================================
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 Serial_MM]$ g++ -m32 mm_mult_serial.cpp -o mm_mult_serial
+[milenka@eb136i-nsf02 Serial_MM]$ ls -lat
+total 40
+-rwxrwxr-x 1 milenka milenka 9099 Oct  3 17:09 mm_mult_serial
+drwxr-xr-x 2 milenka milenka 4096 Oct  3 17:09 .
+-rw-r--r-- 1 milenka milenka  179 Oct  3 17:08 ctx_config
+-rw-r--r-- 1 milenka milenka  836 Oct  3 17:08 mem_config
+-rw-r--r-- 1 milenka milenka 5696 Oct  3 17:08 mm_mult_serial.cpp
+-rw-r--r-- 1 milenka milenka   91 Oct  3 17:08 x86_config
+drwxr-xr-x 4 milenka milenka 4096 Oct  3 17:03 ..
+[milenka@eb136i-nsf02 Serial_MM]$ ./mm_mult_serial 4
+
+[milenka@eb136i-nsf02 Serial_MM]$ ./mm_mult_serial 8
+A matrix =
+48.3962 65.3245 15.0385 72.383 25.8898 46.0265 15.4881 50.6507 
+6.74602 71.0055 12.2209 77.5441 61.5452 31.5127 46.8515 89.4849 
+70.0342 57.3195 75.4144 83.5553 91.7832 7.74197 40.0845 11.1709 
+26.5416 83.9488 86.5328 51.0444 65.3442 85.2683 76.9977 49.0015 
+46.6826 12.2581 99.9706 40.1026 58.6347 47.2069 4.06732 37.0919 
+22.9082 82.6622 29.6587 65.2636 73.2939 86.2391 90.9079 98.2768 
+94.8432 77.6579 82.1206 42.2093 24.7872 95.5199 75.1229 80.2177 
+68.2405 67.1758 13.4739 20.6409 45.3076 87.1467 39.6889 44.3629 
+
+B matrix =
+38.3881 6.44756 53.6544 68.9409 34.132 36.9488 54.6767 97.6566 
+71.2809 58.2415 72.096 0.573277 89.0638 57.5765 16.3821 45.2703 
+79.1678 41.1054 55.6835 9.60452 43.7099 83.2204 33.8307 34.1353 
+51.0135 63.165 32.0002 13.3011 17.076 8.75865 45.1445 51.6847 
+62.9622 87.0633 98.7269 83.4444 54.3303 63.7344 94.4002 41.9646 
+99.0672 85.784 13.5028 84.8248 0.569125 17.281 63.3789 2.15572 
+58.3535 91.3892 57.6433 29.3153 3.03792 3.96694 32.0023 26.5491 
+10.7019 9.10965 11.8166 96.9941 81.4926 32.4998 36.2689 72.1491 
+
+C matrix =
+19032.9 17386.1 15128.8 15912.5 14970.8 11587.9 15186.6 17189.2 
+20932.1 22737.9 18902.9 19516.2 19209 13594.9 17998.2 18649 
+26011.6 24587.8 26371.9 17270.9 18241.8 19401.4 21934.6 22065.5 
+34036.4 32328.5 26548.4 23083.5 20862.6 20998.7 23872.4 20490 
+21628.8 17521.5 17337.5 17332.9 13987.2 16875.9 17948.2 15945.5 
+31963.7 33286 25730.8 28408.1 22871.1 18361.9 25414.8 23130.6 
+34096.6 29124.5 25626.2 28087 22630.4 21314.9 24849 26790.6 
+23804.4 21661.7 18377.1 21786.3 15500.5 13684.1 18898.7 17575.6 
+
+time=6e-06 seconds
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+3. Run program on Multi2Sim Functional Simulator
+===================================================
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 Serial_MM]$ m2s ./mm_mult_serial 8
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: fZp7Q
+
+A matrix =
+. . .
+
+B matrix =
+. . .
+
+C matrix =
+. . .
+
+time=0.002732 seconds
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 0.62 [s]
+SimEnd = ContextsFinished
+
+[ x86 ]
+RealTime = 0.62 [s]
+Instructions = 3636420
+InstructionsPerSecond = 5886108
+Contexts = 1
+Memory = 11395072
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+4. Run program on Multi2Sim on Detailed Simulator (Default parameters)
+======================================================================
+Run the detailed simulations as shown below.
+Notice that simulation will take some time to complete.
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 Serial_MM]$ m2s --x86-sim detailed ./mm_mult_serial 8
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: 1mQUz
+
+A matrix =
+. . .
+
+B matrix =
+. . .
+C matrix =
+. . .
+
+time=0.050497 seconds
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 28.52 [s]
+SimEnd = ContextsFinished
+SimTime = 27950383.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 27950384
+
+[ x86 ]
+RealTime = 28.52 [s]
+Instructions = 5761774
+InstructionsPerSecond = 202045
+Contexts = 1
+Memory = 11395072
+FastForwardInstructions = 0
+CommittedInstructions = 3636263
+CommittedInstructionsPerCycle = 0.1301
+CommittedMicroInstructions = 6114465
+CommittedMicroInstructionsPerCycle = 0.2188
+BranchPredictionAccuracy = 0.9332
+SimTime = 27949913.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 27949913
+CyclesPerSecond = 980103
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Please consult the Multi2Sim manual for interpretation of the statistics reported.
+E.g., RealTime is time it took the simulator to complete the simulation, whereas
+SimTime is the simulated time in nanoseconds and as such it is the performance metric
+of the matrix multiplication program. 
+
+
+5. Generating detailed reports  (Default parameters)
+======================================================================
+To generate detailed statistics for the processor, memory system, and the interconnect,
+you can use the command as shown below.
+The report files will be generated.
+Inspect the contents of these files. Analyze the results.
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 Serial_MM]$ m2s --x86-sim detailed --x86-report mm_x86_Report //
+--mem-report mm_Memory_Report --net-report mm_Network_Report ./mm_mult_serial 8
+. . .
+[milenka@eb136i-nsf02 Serial_MM]$ ls -alt *Report
+-rw-r--r-- 1 milenka milenka  8477 Oct  3 17:50 mm_Memory_Report
+-rw-r--r-- 1 milenka milenka 21240 Oct  3 17:50 mm_x86_Report
+-rw-r--r-- 1 milenka milenka     0 Oct  3 17:49 mm_Network_Report
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+6. Creating your own command line configuration
+===================================================================
+To create your configurations file, consult the help of m2s, specifically 
+-> command line options.
+-> general options there is configuration file; for details explore --ctx-config-help
+-> configuration model for x86 CPU; for details explore --x86-help
+-> configuration model for AMD Evergreen GPU Model; for details explore --evg-help
+-> configuration model for AMD Southern Islands GPU Model; for detials explore --si-help
+-> configuration model for General Memory Systems; for detailes explore --mem-help
+-> configuration model for x86 Network Options; for details explore --net-help
+
+Now let us make a general configuration file.  
+You can specify the command line parameters in a file ctx_config.
+In the example below we specify the matrix multiplication program, its argument, 
+and the output file that will capture m2s's stdout. 
+Configuration file name: ctx_config
+<<~~~~~~~~~~~
+	[ Context 0 ]
+	Exe = /home/milenka/m2s/Serial_MM/mm_mult_serial
+	Args = 8
+	Cwd = /home/milenka/m2s/Serial_MM
+	StdOut = SerialContextOutputFile.txt
+~~~~~~~~~~~>>
+
+Below is an example of using the configuration file in a command.
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 Serial_MM]$ cat ctx_config 
+[ Context 0 ]
+Exe = /home/akt0001/619/m2s_documentation/Serial_MM/mm_mult_serial
+Args = 8
+Cwd = /home/akt0001/619/m2s_documentation/Serial_MM
+StdOut = SerialContextOutputFile.txt
+
+[milenka@eb136i-nsf02 Serial_MM]$ m2s --x86-sim detailed --ctx-config ctx_config
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+7. Creating custom x86 configuration(s) (x86_config)
+===================================================================
+Consult --x86-help for options in configuring the x86 processor.
+Configuration file name: x86_config
+<<~~~~~~~~~~~
+	[ General ]
+	Frequency = 2000
+	Cores = 1
+	[ BranchPredictor ]
+	Kind = Bimodal
+	Bimod.Size = 512
+~~~~~~~~~~~>>
+
+In this example we increase the processor clock to 2,000 MHz and 
+change the conifugarion of the branch predictor. Actually, the specified branch predictor 
+is less sophisticated so you should see a lower prediction rate in the predictor than 
+in the previous simulation run with the default paremeters.
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 Serial_MM]$ m2s --x86-sim detailed --x86-config x86_config  ./mm_mult_serial 8
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: gtYxP
+
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 42.32 [s]
+SimEnd = ContextsFinished
+SimTime = 27468775.00 [ns]
+Frequency = 2000 [MHz]
+Cycles = 54937551
+
+[ x86 ]
+. . .
+BranchPredictionAccuracy = 0.9235
+SimTime = 27468265.50 [ns]
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+8. Creating custom memory configuration (mem-config)
+=====================================================
+Consult --mem-help for options in configuring the memory system (Chapter 9 in the manual).
+Configuration file name: mem_config
+
+We want to specify a system with the following hierarchy:
+Single Processor -> L1 cache -> Switch1 -> L2 cache -> Switch2 -> Main Memory
+
+Specification
+   Processor - single core with one threads
+   L1 Cache - 64KB [Number of Sets 128, Associativity 2, Block size 256, Hit Latency 2 clock cycle, LRU, ports 2]
+   Switch1 - Input and Output Buffer size - 1024B and Bandwidth 256B/clock cycle
+   L2 Cache - 512KB [Number of Sets 512, Associativity 4, Block size 256, Hit Latency 20 clock cycle, LRU, ports 4]
+   Switch2 - Input and Output Buffer size - 1024B and Bandwidth 256B/clock cycle
+   Main Memory - Block size - 256B, Time to access Memory - 200 clock cycle
+   
+Configuration file name: mem_config
+<<~~~~~~~~~~~
+	[CacheGeometry geo-l1]
+	Sets = 128
+	Assoc = 2
+	BlockSize = 256
+	Latency = 2
+	Policy = LRU
+	Ports = 2
+
+	[CacheGeometry geo-l2]
+	Sets = 256
+	Assoc = 4
+	BlockSize = 256
+	Latency = 4
+	Policy = LRU
+	Ports = 2
+
+	[Module mod-l1-0]
+	Type = Cache
+	Geometry = geo-l1
+	LowNetwork = net-l1-l2
+	LowModules = mod-l2-0
+
+	[Module mod-l2-0]
+	Type = Cache
+	Geometry = geo-l2
+	HighNetwork = net-l1-l2
+	LowNetwork = net-l2-mm
+	LowModules = mod-mm
+
+	[Module mod-mm]
+	Type = MainMemory
+	BlockSize = 256
+	Latency = 200
+	HighNetwork = net-l2-mm
+
+	[Network net-l1-l2]
+	DefaultInputBufferSize = 1024
+	DefaultOutputBufferSize = 1024
+	DefaultBandwidth = 256
+
+	[Network net-l2-mm]
+	DefaultInputBufferSize = 1024
+	DefaultOutputBufferSize = 1024
+	DefaultBandwidth = 256
+
+	[Entry core-0]
+	Arch = x86
+	Core = 0
+	Thread = 0
+	DataModule = mod-l1-0
+	InstModule = mod-l1-0
+~~~~~~~~~~~>>		
+
+Run a simulation with the given memory configuration.
+What is the execution time? How does it compare with the defualt configuration.
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[milenka@eb136i-nsf02 Serial_MM]$ m2s --x86-sim detailed --ctx-config ctx_config --x86-config x86_config --mem-config mem_config --mem-report mm_Memory_Report
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: x7Ewp
+
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 15.53 [s]
+SimEnd = ContextsFinished
+SimTime = 5545559.00 [ns]
+Frequency = 2000 [MHz]
+Cycles = 11091119
+
+[ x86 ]
+RealTime = 15.53 [s]
+Instructions = 6348421
+InstructionsPerSecond = 408804
+Contexts = 1
+Memory = 11395072
+FastForwardInstructions = 0
+CommittedInstructions = 3620725
+CommittedInstructionsPerCycle = 0.3265
+CommittedMicroInstructions = 6092896
+CommittedMicroInstructionsPerCycle = 0.5494
+BranchPredictionAccuracy = 0.9226
+SimTime = 5545307.00 [ns]
+Frequency = 2000 [MHz]
+Cycles = 11090614
+CyclesPerSecond = 714176
+
+[milenka@eb136i-nsf02 Serial_MM]$ 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	
