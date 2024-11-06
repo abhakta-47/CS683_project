@@ -3,9 +3,9 @@
 - `git submodule update --init --recursive`
 
 ## Multi2Sim guides
-- run multi2sim using docker `docker run --rm -it  multi2sim/multi2sim:latest bash`
-- x86 config `docker run --rm -it multi2sim/multi2sim:latest m2s --x86-help`
-- memory config `docker run --rm -it multi2sim/multi2sim:latest m2s --mem-help`
+- run multi2sim using docker `docker run --rm -it -v ./zsh_history:/root/.zsh_history -v ./:/stuff captab47/multi2sim:latest zsh`
+- x86 config `docker run --rm -it captab47/multi2sim:latest m2s --x86-help`
+- memory config `docker run --rm -it captab47/multi2sim:latest m2s --mem-help`
 
 ## Benchmarks
 ### Parsec
